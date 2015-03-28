@@ -21,19 +21,11 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework:spring-orm")
-    compile("org.postgresql:postgresql:9.4-1201-jdbc41")
-    compile("org.hibernate:hibernate-core")
-    compile("org.hibernate.common:hibernate-commons-annotations:4.0.5.Final")
-    compile("org.hibernate:hibernate-entitymanager")
-    compile("org.hibernate:hibernate-validator")
-    compile("org.javassist:javassist")
-    compile("org.apache.tomcat:tomcat-dbcp:8.0.21")
     testCompile("junit:junit")
 }
 
