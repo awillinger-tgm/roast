@@ -1,11 +1,10 @@
-package roast;
+package roast.rest;
 
 /**
- * -- DESCRIPTION --
+ * Represents a response after performing a query on an knowledge base item (CRUD).
  *
  * @author Andreas Willinger
- * @version 0.1
- * @since 27.03.2015 10:52
+ * @version 1.0
  */
 public class ItemResponse
 {

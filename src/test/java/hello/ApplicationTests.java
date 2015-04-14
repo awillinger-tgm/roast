@@ -17,41 +17,45 @@
 package hello;
 
 import static org.junit.Assert.assertNotNull;
-import io.spring.guides.gs_producing_web_service.GetCountryRequest;
 
+import io.roast.GetItemRequest;
+
+import io.roast.GetItemResponse;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ClassUtils;
 import org.springframework.ws.client.core.WebServiceTemplate;
+import roast.beef.Application;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
-public class ApplicationTests {
-
+public class ApplicationTests
+{
 	private Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 
-	@Value("${local.server.port}")
-	private int port = 0;
+    private static Logger logger = Logger.getLogger(ApplicationTests.class);
+
+	private int port = 8080;
 
 	@Before
 	public void init() throws Exception {
-		marshaller.setPackagesToScan(ClassUtils.getPackageName(GetCountryRequest.class));
+		marshaller.setPackagesToScan(ClassUtils.getPackageName(GetItemRequest.class));
 		marshaller.afterPropertiesSet();
 	}
 
 	@Test
 	public void testSendAndReceive() {
-		GetCountryRequest request = new GetCountryRequest();
-		request.setName("Spain");
-		assertNotNull(new WebServiceTemplate(marshaller).marshalSendAndReceive("http://localhost:"
-				+ port + "/ws", request));
+        GetItemRequest request = new GetItemRequest();
+		request.setQuery("Test");
+        GetItemResponse response = (GetItemResponse)new WebServiceTemplate(marshaller).marshalSendAndReceive("http://localhost:"
+                + port + "/searchItem", request);
+		assertNotNull(response);
 	}
-
 }

@@ -1,20 +1,15 @@
-package roast;
+package roast.beef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * -- DESCRIPTION --
+ * Represents a knowledge entry item.
  *
  * @author Andreas Willinger
- * @version 0.1
- * @since 27.03.2015 10:41
+ * @version 1.0
  */
-
-@NamedQueries({
-        @NamedQuery(name = "getItemById", query = "FROM Item i WHERE i.id = :id")
-})
 @Entity
 public class Item
 {

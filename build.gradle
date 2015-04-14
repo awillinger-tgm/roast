@@ -1,9 +1,13 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'
+        classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.5'
     }
 }
 
@@ -11,10 +15,56 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'com.github.jacobono.jaxb'
+
+configurations {
+    jaxb
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+
+task genJaxb {
+    ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
+    ext.classesDir = "${buildDir}/classes/jaxb"
+    ext.schema = "src/main/resources/item.xsd"
+
+    outputs.dir classesDir
+
+    doLast() {
+        project.ant {
+            taskdef name: "xjc", classname: "com.sun.tools.xjc.XJCTask",
+                    classpath: configurations.jaxb.asPath
+            mkdir(dir: sourcesDir)
+            mkdir(dir: classesDir)
+
+            xjc(destdir: sourcesDir, schema: schema) {
+                arg(value: "-wsdl")
+                produces(dir: sourcesDir, includes: "**/*.java")
+            }
+
+            javac(destdir: classesDir, source: 1.6, target: 1.6, debug: true,
+                    debugLevel: "lines,vars,source",
+                    classpath: configurations.jaxb.asPath) {
+                src(path: sourcesDir)
+                include(name: "**/*.java")
+                include(name: "*.java")
+            }
+
+            copy(todir: classesDir) {
+                fileset(dir: sourcesDir, erroronmissingdir: false) {
+                    exclude(name: "**/*.java")
+                }
+            }
+        }
+    }
+}
 
 jar {
-    baseName = 'gs-rest-service'
+    baseName = 'gs-beef-service'
     version =  '0.1.0'
+    from genJaxb.classesDir
 }
 
 repositories {
@@ -23,14 +73,41 @@ repositories {
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-ws'
+    compile 'wsdl4j:wsdl4j:1.6.1'
+    jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.4-1'
+    compile 'org.springframework:spring-orm'
+    compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
+    compile 'org.hibernate:hibernate-core'
+    compile 'org.hibernate.common:hibernate-commons-annotations:4.0.5.Final'
+    compile 'org.hibernate:hibernate-entitymanager'
+    compile 'org.hibernate:hibernate-validator'
+    compile 'org.javassist:javassist'
+    compile 'org.apache.tomcat:tomcat-dbcp:8.0.21'
+    compile(files(genJaxb.classesDir).builtBy(genJaxb))
     testCompile 'junit:junit'
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
 project(':Rest') {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'spring-boot'
+    
+    repositories {
+        mavenCentral()
+    }
     dependencies {
+        compile 'org.springframework.boot:spring-boot-starter-web'
+        compile 'org.springframework:spring-orm'
+        compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
+        compile 'org.hibernate:hibernate-core'
+        compile 'org.hibernate.common:hibernate-commons-annotations:4.0.5.Final'
+        compile 'org.hibernate:hibernate-entitymanager'
+        compile 'org.hibernate:hibernate-validator'
+        compile 'org.javassist:javassist'
+        compile 'org.apache.tomcat:tomcat-dbcp:8.0.21'
+        testCompile 'junit:junit'
     }
 }

@@ -1,4 +1,4 @@
-package roast;
+package roast.beef;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;

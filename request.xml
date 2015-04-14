@@ -1,9 +1,9 @@
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-				  xmlns:gs="http://spring.io/guides/gs-producing-web-service">
+				  xmlns:gs="http://roast.io">
    <soapenv:Header/>
    <soapenv:Body>
-      <gs:getCountryRequest>
-         <gs:name>Spain</gs:name>
-      </gs:getCountryRequest>
+      <gs:getItemRequest>
+         <gs:query>Lorem</gs:query>
+      </gs:getItemRequest>
    </soapenv:Body>
 </soapenv:Envelope>
