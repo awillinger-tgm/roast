@@ -3,7 +3,7 @@
    <soapenv:Header/>
    <soapenv:Body>
       <gs:getItemRequest>
-         <gs:query>Lorem</gs:query>
+         <gs:query>Test</gs:query>
       </gs:getItemRequest>
    </soapenv:Body>
 </soapenv:Envelope>

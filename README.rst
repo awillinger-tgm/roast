@@ -128,6 +128,9 @@ Troubles
   unable to autowire the SessionFactory to Hibernate.
   This was caused because the configuration class was in the wrong package.
   After solving these problems, Hibernate works like a charm.
+- We first had problems figuring out how to actually correctly send messages to
+  the ReST server, but figured it out later.
+  You simply send the message with the same attributes as the class is defined.
 - We first tried to use the same class for Hibernate and for the XML output in
   the SOA project (the one for XML gets auto-generated when parsing the XSD definitions).
   Unfortunately, this did not work either, as Hibernate uses java.util.Date, but XML
@@ -142,12 +145,62 @@ Technologies
 ============
 
 SOA
+~~~
+
+"A service-oriented architecture is essentially a collection of services. These
+services communicate with each other. The communication can involve either simple
+data passing or it could involve two or more services coordinating some activity.
+Some means of connecting services to each other is needed." [3]_
 
 ReST
+~~~~
+
+"Representational State Transfer (REST) is a style of architecture based on a set
+of principles that describe how networked resources are defined and addressed.
+These principles were first described in 2000 by Roy Fielding as part of his doctoral
+dissertation. REST is an alternative to SOAP and JavaScript Object Notation (JSON).
+
+It is important to note that REST is a style of software architecture as opposed
+to a set of standards. As a result, such applications or architectures are
+sometimes referred to as RESTful or REST-style applications or architectures.
+REST has proved to be a popular choice for implementing Web Services." [4]_
 
 JSON
+~~~~
 
-WSDL
+"JSON (JavaScript Object Notation) is a lightweight data-interchange format. It
+is easy for humans to read and write. It is easy for machines to parse and
+generate. It is based on a subset of the JavaScript Programming Language, Standard
+ECMA-262 3rd Edition - December 1999. JSON is a text format that is completely
+language independent but uses conventions that are familiar to programmers of
+the C-family of languages, including C, C++, C#, Java, JavaScript, Perl, Python,
+and many others. These properties make JSON an ideal data-interchange language." [5]_
+
+It is used to exchange data in the ReST implementation between server and client.
+
+Spring
+~~~~~~
+
+"Spring Framework is a Java platform that provides comprehensive infrastructure
+support for developing Java applications. Spring handles the infrastructure so
+you can focus on your application.
+
+Spring enables you to build applications from “plain old Java objects” (POJOs)
+and to apply enterprise services non-invasively to POJOs. This capability applies
+to the Java SE programming model and to full and partial Java EE.
+
+Examples of how you, as an application developer, can use the Spring platform advantage:
+
+- Make a Java method execute in a database transaction without having to deal with transaction APIs.
+
+- Make a local Java method a remote procedure without having to deal with remote APIs.
+
+- Make a local Java method a management operation without having to deal with JMX APIs.
+
+- Make a local Java method a message handler without having to deal with JMS APIs." [6]_
+
+We decided to use Spring as it makes developing the web applications much more
+easier and there are a lot of examples available to quickly start off.
 
 Setup and Usage
 ===============
@@ -182,6 +235,11 @@ application.properties file.
     ./gradlew :run
 
 This starts the ReST service on localhost, port 8080.
+
+When running the application for the first time, xjc will be called, which generates
+Java class files and the WSDL definition from an XSD.
+
+The XSD can be be found in src/main/resources/item.xsd and contains all definitions.
 
 **SOA client**
 
@@ -218,26 +276,103 @@ To enable it, run the following commands on the roast database:
 
 This has to be only done once after creating the table.
 
+Data transfer in SOA
+====================
+
+For our first tests, we created a simple request.xml file, which looks like
+follows:
+
+.. code:: xml
+
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+				  xmlns:gs="http://roast.io">
+       <soapenv:Header/>
+       <soapenv:Body>
+          <gs:getItemRequest>
+             <gs:query>Test</gs:query>
+          </gs:getItemRequest>
+       </soapenv:Body>
+    </soapenv:Envelope>
+
+The getItemRequest needs to have the same fields as defined in the WSDL.
+
+To send it, one can simply use curl:
+
+.. code:: bash
+
+    curl --header "content-type: text/xml" -d @request.xml http://127.0.0.1:8080/searchItem
+
+The response looks like this:
+
+.. code:: xml
+
+    <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+        <SOAP-ENV:Header/>
+        <SOAP-ENV:Body>
+            <ns2:getItemResponse xmlns:ns2="http://roast.io">
+                <ns2:response>
+                    <ns2:id>10</ns2:id>
+                    <ns2:title>Test</ns2:title>
+                    <ns2:content>A very long content inhalt</ns2:content>
+                    <ns2:timestamp>1970-01-17+01:00</ns2:timestamp>
+                </ns2:response>
+                <ns2:response>
+                    <ns2:id>11</ns2:id>
+                    <ns2:title>Test 2</ns2:title>
+                    <ns2:content>A very long content inhalt 77777</ns2:content>
+                    <ns2:timestamp>1970-01-17+01:00</ns2:timestamp>
+                </ns2:response>
+            </ns2:getItemResponse>
+        </SOAP-ENV:Body>
+    </SOAP-ENV:Envelope>
+
+There are of course libraries for Java which take care of the communication.
+
+One of them is the Jaxb2Marshaller, provided by Spring.
+
 Testing
 =======
 
 Time recording
 ==============
 
-
 Sources
 =======
 
 .. _1:
 
-[1] "Getting Started &middot; Building a RESTful Web Service"
+[1] "Getting Started Building a RESTful Web Service"
      https://spring.io/guides/gs/rest-service/
      last visited: 2015-04-15
 
 .. _2:
 
-[2] "Getting Started &middot; Producing a SOAP web service"
+[2] "Getting Started Producing a SOAP web service"
      https://spring.io/guides/gs/producing-web-service/
+     last visited: 2015-04-15
+
+.. _3:
+
+[3] "Service-Oriented Architecture (SOA) Definition"
+     http://www.service-architecture.com/articles/web-services/service-oriented_architecture_soa_definition.html
+     last visited: 2015-04-15
+
+.. _4:
+
+[4] "Representational State Transfer (REST)"
+     http://www.service-architecture.com/articles/web-services/representational_state_transfer_rest.html
+     last visited: 2015-04-15
+
+.. _5:
+
+[5] "JSON"
+     http://json.org/
+     last visited: 2015-04-15
+
+.. _6:
+
+[6] "1. Introduction to Spring Framework"
+     http://docs.spring.io/spring-framework/docs/3.0.x/reference/overview.html
      last visited: 2015-04-15
 
 
