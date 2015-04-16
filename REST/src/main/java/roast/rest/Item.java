@@ -10,9 +10,6 @@ import java.util.Date;
  * @author Andreas Willinger
  * @version 1.0
  */
-@NamedQueries({
-        @NamedQuery(name = "getItemById", query = "FROM Item i WHERE i.id = :id")
-})
 @Entity
 public class Item
 {
@@ -22,6 +19,7 @@ public class Item
     @NotNull
     private String title;
     @NotNull
+    @Column(columnDefinition = "text", length = 65536)
     private String content;
     @NotNull
     private Date timestamp;

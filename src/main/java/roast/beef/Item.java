@@ -19,6 +19,7 @@ public class Item
     @NotNull
     private String title;
     @NotNull
+    @Column(columnDefinition = "text", length = 65536)
     private String content;
     @NotNull
     private Date timestamp;

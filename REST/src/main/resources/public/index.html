@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ReST Client</title>
+  <script src="js/jquery-1.10.2.js"></script>
+  <script src="js/jquery-ui.js"></script>
+  <link rel="stylesheet" href="css/jquery-ui.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+  $(function()
+  {
+    $( "#tabs" ).tabs();
+  });
+  </script>
+</head>
+<body>
+
+<div id="wrapper">
+    <div class="ui-widget">
+        <div class="ui-widget-header" style="padding: 6px;">
+        Server settings
+        </div>
+        <div class="ui-widget-content" style="padding: 6px;">
+            ReST server port:
+            <input type="text" name="server_port" id="server_port" placeholder="8080">
+            ReST item URL:
+            <input type="text" name="server_url" id="server_url" placeholder="/items">
+        </div>
+    </div>
+    <div class="ui-helper-clearfix" style="margin-bottom: 6px"></div>
+    <div id="tabs">
+      <ul>
+        <li><a href="#tabs-1">Add a new item</a></li>
+        <li><a href="#tabs-2">Update an existing item</a></li>
+        <li><a href="#tabs-3">Delete item</a></li>
+      </ul>
+      <div id="tabs-1">
+        <p></p>
+      </div>
+      <div id="tabs-2">
+        <p></p>
+      </div>
+      <div id="tabs-3">
+        <p></p>
+      </div>
+    </div>
+</div>
+ 
+</body>
+</html>
