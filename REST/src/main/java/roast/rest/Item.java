@@ -11,6 +11,9 @@ import java.util.Date;
  * @version 1.0
  */
 @Entity
+@NamedQueries({
+       @NamedQuery(name = "getItemById", query = "FROM Item i WHERE i.id = :id")
+})
 public class Item
 {
     @Id

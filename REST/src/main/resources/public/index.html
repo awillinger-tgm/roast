@@ -5,44 +5,48 @@
   <title>ReST Client</title>
   <script src="js/jquery-1.10.2.js"></script>
   <script src="js/jquery-ui.js"></script>
-  <link rel="stylesheet" href="css/jquery-ui.css">
-  <link rel="stylesheet" href="css/style.css">
-  <script>
-  $(function()
-  {
-    $( "#tabs" ).tabs();
-  });
-  </script>
+  <script src="js/jquery-ui-timepicker-addon.js"></script>
+  <script src="js/communication.js"></script>
+  <link rel="stylesheet" href="css/jquery-ui.css" type="text/css">
+  <link rel="stylesheet" href="css/jquery-ui-timepicker-addon.css" type="text/css">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
 
 <div id="wrapper">
-    <div class="ui-widget">
-        <div class="ui-widget-header" style="padding: 6px;">
-        Server settings
-        </div>
-        <div class="ui-widget-content" style="padding: 6px;">
-            ReST server port:
-            <input type="text" name="server_port" id="server_port" placeholder="8080">
-            ReST item URL:
-            <input type="text" name="server_url" id="server_url" placeholder="/items">
-        </div>
-    </div>
-    <div class="ui-helper-clearfix" style="margin-bottom: 6px"></div>
     <div id="tabs">
       <ul>
-        <li><a href="#tabs-1">Add a new item</a></li>
-        <li><a href="#tabs-2">Update an existing item</a></li>
+        <li><a href="#tabs-1">Add new item</a></li>
+        <li><a href="#tabs-2">Update existing item</a></li>
         <li><a href="#tabs-3">Delete item</a></li>
       </ul>
       <div id="tabs-1">
-        <p></p>
+        <p>
+            Title: <input type="text" name="new_title" id="new_title" size="45" maxlength="255"><br style="margin-bottom: 6px;">
+            Content: <textarea rows="15" cols="80" name="new_content" id="new_content"></textarea><br style="margin-bottom: 6px;">
+            Date: <input type="text" name="new_timestamp" id="new_timestamp"> Format: yyyy-mm-dd<br><br>
+            <input type="button" name="new_send" id="new_send" value="Save">
+        </p>
       </div>
       <div id="tabs-2">
-        <p></p>
+        <p>
+            ID of item: <input type="text" name="existing_id" id="existing_id" size="10">
+            <input type="button" name="existing_getItem" id="existing_getItem" value="Load">
+            <hr style="margin-bottom: 10px">
+            Title: <input type="text" name="existing_title" id="existing_title" size="45" maxlength="255" disabled="disabled"><br style="margin-bottom: 6px;">
+            Content: <textarea rows="15" cols="80" name="existing_content" id="existing_content" disabled="disabled"></textarea><br style="margin-bottom: 6px;">
+            Date: <input type="text" name="existing_timestamp" id="existing_timestamp" disabled="disabled"> Format: yyyy-mm-dd<br><br>
+            <input type="button" name="existing_send" id="existing_send" value="Save" disabled="disabled">
+        </p>
       </div>
       <div id="tabs-3">
-        <p></p>
+        <p>
+            ID of item: <input type="text" name="delete_id" id="delete_id" size="10">
+            <input type="button" name="delete_send" id="delete_send" value="Delete">
+            <br style="margin-bottom: 10px">
+            <b>Warning!</b><br>
+            Once the "Delete" button is pushed, the item will be deleted unrecoverably!
+        </p>
       </div>
     </div>
 </div>
