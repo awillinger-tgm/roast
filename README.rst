@@ -1,6 +1,6 @@
-####################################################
-Service Oriented Architecture and RESTful Webservice
-####################################################
+##########################
+SOA and RESTful Webservice
+##########################
 
 Requirements
 ============
@@ -96,7 +96,7 @@ UML
 ~~~
 
 .. image:: img/datamodel.jpg
-    :width: 70%
+    :width: 50%
 
 
 Structure
