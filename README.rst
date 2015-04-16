@@ -49,7 +49,7 @@ Design
 We first looked around for already existing tutorials/examples on the two
 implementations and found them.
 
-Based on those, the design was done.
+Based on those, the design was performed.
 
 Both implementations share the following aspects:
 
@@ -95,7 +95,7 @@ The design for this is as follows:
 UML
 ~~~
 
-.. image:: datamodel.jpg
+.. image:: img/datamodel.jpg
     :width: 70%
 
 
@@ -247,12 +247,25 @@ The XSD can be be found in src/main/resources/item.xsd and contains all definiti
 
     ./gradlew SOAClient:run
 
+After starting the application, you will be prompted to enter the URL of the SOA
+server and decide if you want to redirect the results into a file or not.
+
+To see how it looks like, see the testing section below.
+
+Please keep in mind that if you update the XSD and regenerate the class files/WSDL
+with xjc, you must copy over the generated classes to this project.
+
+Otherwise, the server might not understand what the client sends.
+
 **ReST client**
 
-To run the ReST client, simply open the index.html file located in RestClient/
-in your browser, the communication works over AJAX.
+The ReST client is hosted as a static asset on the ReST server and located in its
+resources/public directory.
 
-Also make sure that you set the correct IP/Port in the respective input field.
+To use it, browse to the URL where the ReST server is running on, but leave out
+any file specifiers (i.e. access /).
+
+Example: http://localhost:9090/
 
 **WSDL**
 
@@ -332,6 +345,95 @@ One of them is the Jaxb2Marshaller, provided by Spring.
 
 Testing
 =======
+
+ReST client
+~~~~~~~~~~~
+
+The ReST client can be used in every modern web browser that supports JavaScript
+and ideally, HTML5 (it will work without HTML5 too, but will not look that fancy).
+
+Adding a new item
+-----------------
+
+The adding item tab is the default one and is therefore showed once you open the
+webpage for the first time.
+
+The initial form:
+
+.. image:: img/restclient_add_form.jpg
+    :width: 70%
+
+Example response:
+
+.. image:: img/restclient_add_sent.jpg
+    :width: 70%
+
+If the DB connection is down for example, a error message dialogue will be shown
+with some more information about the error itself.
+
+Updating an existing item
+-------------------------
+
+First, you have to enter the unique ID of the item you want to update.
+
+It can be retrieved by, for example, using the SOA client for querying.
+
+.. image:: img/restclient_update_form.jpg
+    :width: 70%
+
+After clicking on "load" a request is sent to the server and the current data of
+the item will be loaded.
+
+.. image:: img/restclient_update_loaded.jpg
+    :width: 70%
+
+Then, the item itself can be updated.
+
+.. image:: img/restclient_update_sent.jpg
+    :width: 70%
+
+Deleting an item
+----------------
+
+Similar to the update item form, the delete form also requires the unique item ID
+of the entry you want to delete.
+
+.. image:: img/restclient_delete_sent.jpg
+    :width: 70%
+
+
+SOA client
+~~~~~~~~~~
+
+The SOA client can be set to either directly print the results out in the CLI or
+save them to a file.
+
+Direct output
+-------------
+
+Smallish result:
+
+.. image:: img/soaclient_smallquery_sout.jpg
+    :width: 70%
+
+Bigger result:
+
+.. image:: img/soaclient_bigquery_sout.jpg
+    :width: 70%
+
+File output
+-----------
+
+When receiving a result, the result will directly be saved to the file and only
+an information message will be shown.
+
+.. image:: img/soaclient_query_fileout.jpg
+    :width: 70%
+
+The file:
+
+.. image:: img/soaclient_query_fileout_result.jpg
+    :width: 70%
 
 Time recording
 ==============

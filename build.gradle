@@ -89,6 +89,26 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
+project(':SOAClient') {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'spring-boot'
+    
+    repositories {
+        mavenCentral()
+    }
+    
+    dependencies {
+        compile 'commons-logging:commons-logging:1.2'
+        compile 'org.springframework.ws:spring-ws-core:2.2.1.RELEASE'
+    }
+    
+    run {
+        standardInput = System.in
+    }
+}
+
 project(':Rest') {
     apply plugin: 'java'
     apply plugin: 'eclipse'
