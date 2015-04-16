@@ -108,9 +108,11 @@ As we were not able to configure Gradle properly so it provides a shared "root"
 project and the actual implementations as sub projects, the locations of the
 implementations are as follows:
 
+SOAClient/ - the SOA client
+
 src/ - the SOA web service
 
-Rest/ - the ReST web service
+Rest/ - the ReST web service, included in it the ReST web application
 
 Or said otherwise, the SOA project is the "root" project.
 
@@ -257,9 +259,9 @@ with xjc, you must copy over the generated classes to this project.
 
 Otherwise, the server might not understand what the client sends.
 
-**ReST client**
+**ReST web application**
 
-The ReST client is hosted as a static asset on the ReST server and located in its
+The ReST web application is hosted as a static asset on the ReST server and located in its
 resources/public directory.
 
 To use it, browse to the URL where the ReST server is running on, but leave out
@@ -346,11 +348,12 @@ One of them is the Jaxb2Marshaller, provided by Spring.
 Testing
 =======
 
-ReST client
-~~~~~~~~~~~
+ReST web application
+~~~~~~~~~~~~~~~~~~~~
 
-The ReST client can be used in every modern web browser that supports JavaScript
-and ideally, HTML5 (it will work without HTML5 too, but will not look that fancy).
+The ReST web application can be used in every modern web browser that supports
+JavaScript and ideally, HTML5 (it will work without HTML5 too, but will not
+look that fancy).
 
 Adding a new item
 -----------------
@@ -458,7 +461,7 @@ Task                             Date       From  To    Duration
 ================================ ========== ===== ===== =========
 Spring Hibernate Setup, ReST     2015-03-27 09:00 14:00   05:00
 Spring SOA implementation        2015-04-14 09:00 15:00   06:00
-ReST client                      2015-04-16 10:00 11:40   01:40
+ReST web application             2015-04-16 10:00 11:40   01:40
 SOA client                       2015-04-16 12:50 14:20   01:30
 **Total**                                               **14:10**
 ================================ ========== ===== ===== =========

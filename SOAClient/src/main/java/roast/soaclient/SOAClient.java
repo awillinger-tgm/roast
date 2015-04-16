@@ -9,13 +9,11 @@ import org.springframework.ws.client.core.WebServiceTemplate;
 
 import java.io.*;
 
-
 /**
- * -- DESCRIPTION --
+ * A SOA client implementation, querying the iKnow database.
  *
  * @author Andreas Willinger
- * @version 0.1
- * @since 16.04.2015 13:15
+ * @version 1.0
  */
 public class SOAClient
 {
@@ -30,12 +28,17 @@ public class SOAClient
         this.filePath = filePath;
     }
 
+    /**
+     * Reads input from the user and sends/receives the messages to/from the server.
+     */
     public void run()
     {
         String input;
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
+        // this translates the itemRequest object into a XML structure
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        // set which packages contain POJOs mit XML annotations
         marshaller.setPackagesToScan(ClassUtils.getPackageName(GetItemRequest.class));
         GetItemRequest request = new GetItemRequest();
 
@@ -70,8 +73,10 @@ public class SOAClient
                 }
 
                 request.setQuery(input);
+                // actually send the request
                 GetItemResponse response = (GetItemResponse)new WebServiceTemplate(marshaller).marshalSendAndReceive(this.address, request);
 
+                // prepare output
                 StringBuilder buffer = new StringBuilder("\n\n> getItemResponse - results: "+response.getResponse().size());
                 buffer.append("\n--------------------");
 
@@ -91,6 +96,7 @@ public class SOAClient
 
                 buffer.append("\n--------------------");
 
+                // either direct output or write into a file
                 if(!this.redirectToFile)
                 {
                     System.out.println(buffer.toString());

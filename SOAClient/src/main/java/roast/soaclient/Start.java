@@ -1,7 +1,5 @@
 package roast.soaclient;
 
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,11 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * -- DESCRIPTION --
+ * The entry point of the application.
+ * Reads the required parameters from the user and starts the actual client.
  *
  * @author Andreas Willinger
- * @version 0.1
- * @since 16.04.2015 13:30
+ * @version 1.0
  */
 public class Start
 {
@@ -23,6 +21,7 @@ public class Start
         String address;
         boolean redirectToFile = false;
         String fileName = "";
+
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("\n\nWelcome to SOAClient v.1.0\nThis application allows you to send queries to the iKnow database.\n\n");
@@ -34,6 +33,7 @@ public class Start
             {
                 buffer = in.readLine();
 
+                // check if the entered URL is actually an URL
                 Pattern p = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
                 Matcher m = p.matcher(buffer);
 
@@ -41,6 +41,7 @@ public class Start
                 {
                     System.out.println("\nInvalid URL specified");
                     System.out.println("\n> ");
+
                     continue;
                 }
 
@@ -74,6 +75,8 @@ public class Start
                 System.out.println("Something went wrong: "+ex.getMessage());
             }
         }
+
+        // and start the client
         SOAClient client = new SOAClient(address, redirectToFile, fileName);
         client.run();
     }

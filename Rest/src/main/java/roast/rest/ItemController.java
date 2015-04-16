@@ -70,20 +70,6 @@ public class ItemController
         try
         {
             session.save(item);
-
-            // temporary
-            /*
-            for(int i = 0; i < 1000000; i++)
-            {
-                Item item2 = new Item();
-                item2.setId(null);
-                item2.setTitle("Knowledge base entry #"+i);
-                item2.setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse egestas aliquet suscipit. Sed blandit dui ut metus. ");
-                item2.setTimestamp(new Date());
-
-                session.save(item2);
-            } */
-            // commit
             tx.commit();
 
             return new ItemResponse(true, "", item);
